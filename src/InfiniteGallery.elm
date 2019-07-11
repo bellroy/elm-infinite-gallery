@@ -1,4 +1,4 @@
-module Gallery exposing
+module InfiniteGallery exposing
     ( Config, defaultConfig
     , init, update, view
     , previous, next, goTo, setIndex

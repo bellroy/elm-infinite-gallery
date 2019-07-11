@@ -4863,15 +4863,15 @@ var author$project$Example$viewSlide = function (index) {
 					]))
 			]));
 };
-var author$project$Gallery$defaultConfig = {F: 'Gallery_0', G: 'BellroyGallery', H: 150, q: 300};
-var author$project$Gallery$Gallery = F5(
+var author$project$InfiniteGallery$defaultConfig = {F: 'Gallery_0', G: 'BellroyGallery', H: 150, q: 300};
+var author$project$InfiniteGallery$Gallery = F5(
 	function (a, b, c, d, e) {
 		return {$: 0, a: a, b: b, c: c, d: d, e: e};
 	});
-var author$project$Gallery$NotDragging = {$: 0};
-var author$project$Gallery$init = F3(
+var author$project$InfiniteGallery$NotDragging = {$: 0};
+var author$project$InfiniteGallery$init = F3(
 	function (size, config, slides) {
-		return A5(author$project$Gallery$Gallery, size, config, slides, 0, author$project$Gallery$NotDragging);
+		return A5(author$project$InfiniteGallery$Gallery, size, config, slides, 0, author$project$InfiniteGallery$NotDragging);
 	});
 var elm$core$List$foldrHelper = F4(
 	function (fn, acc, ctr, ls) {
@@ -4948,9 +4948,9 @@ var author$project$Example$init = function (_n0) {
 	return _Utils_Tuple2(
 		author$project$Example$Model(
 			A3(
-				author$project$Gallery$init,
+				author$project$InfiniteGallery$init,
 				{as: '500px', aG: 'auto'},
-				author$project$Gallery$defaultConfig,
+				author$project$InfiniteGallery$defaultConfig,
 				A2(
 					elm$core$List$map,
 					author$project$Example$viewSlide,
@@ -4960,22 +4960,22 @@ var author$project$Example$init = function (_n0) {
 var author$project$Example$MsgForGallery = function (a) {
 	return {$: 0, a: a};
 };
-var author$project$Gallery$Next = {$: 3};
-var author$project$Gallery$Batch = function (a) {
+var author$project$InfiniteGallery$Next = {$: 3};
+var author$project$InfiniteGallery$Batch = function (a) {
 	return {$: 8, a: a};
 };
-var author$project$Gallery$Dragging = F2(
+var author$project$InfiniteGallery$Dragging = F2(
 	function (a, b) {
 		return {$: 1, a: a, b: b};
 	});
-var author$project$Gallery$GoTo = function (a) {
+var author$project$InfiniteGallery$GoTo = function (a) {
 	return {$: 5, a: a};
 };
-var author$project$Gallery$Previous = {$: 4};
-var author$project$Gallery$SetIndex = function (a) {
+var author$project$InfiniteGallery$Previous = {$: 4};
+var author$project$InfiniteGallery$SetIndex = function (a) {
 	return {$: 6, a: a};
 };
-var author$project$Gallery$SetTransitionSpeed = function (a) {
+var author$project$InfiniteGallery$SetTransitionSpeed = function (a) {
 	return {$: 7, a: a};
 };
 var elm$core$Basics$negate = function (n) {
@@ -5073,7 +5073,7 @@ var elm$core$Tuple$mapSecond = F2(
 			x,
 			func(y));
 	});
-var author$project$Gallery$update = F2(
+var author$project$InfiniteGallery$update = F2(
 	function (msg, gallery) {
 		update:
 		while (true) {
@@ -5095,12 +5095,12 @@ var author$project$Gallery$update = F2(
 					var posX = msg.a;
 					return _Utils_Tuple2(
 						A5(
-							author$project$Gallery$Gallery,
+							author$project$InfiniteGallery$Gallery,
 							size,
 							config,
 							slides,
 							currentSlide,
-							A2(author$project$Gallery$Dragging, posX, posX)),
+							A2(author$project$InfiniteGallery$Dragging, posX, posX)),
 						elm$core$Platform$Cmd$none);
 				case 1:
 					var posX = msg.a;
@@ -5110,24 +5110,24 @@ var author$project$Gallery$update = F2(
 						var startX = dragState.a;
 						return _Utils_Tuple2(
 							A5(
-								author$project$Gallery$Gallery,
+								author$project$InfiniteGallery$Gallery,
 								size,
 								config,
 								slides,
 								currentSlide,
-								A2(author$project$Gallery$Dragging, startX, posX)),
+								A2(author$project$InfiniteGallery$Dragging, startX, posX)),
 							elm$core$Platform$Cmd$none);
 					}
 				case 2:
 					if (!dragState.$) {
 						return _Utils_Tuple2(
-							A5(author$project$Gallery$Gallery, size, config, slides, currentSlide, author$project$Gallery$NotDragging),
+							A5(author$project$InfiniteGallery$Gallery, size, config, slides, currentSlide, author$project$InfiniteGallery$NotDragging),
 							elm$core$Platform$Cmd$none);
 					} else {
 						var startX = dragState.a;
 						var currentX = dragState.b;
 						if (_Utils_cmp(startX - currentX, config.H) > 0) {
-							var $temp$msg = author$project$Gallery$Next,
+							var $temp$msg = author$project$InfiniteGallery$Next,
 								$temp$gallery = gallery;
 							msg = $temp$msg;
 							gallery = $temp$gallery;
@@ -5136,14 +5136,14 @@ var author$project$Gallery$update = F2(
 							if (_Utils_cmp(
 								elm$core$Basics$abs(startX - currentX),
 								config.H) > 0) {
-								var $temp$msg = author$project$Gallery$Previous,
+								var $temp$msg = author$project$InfiniteGallery$Previous,
 									$temp$gallery = gallery;
 								msg = $temp$msg;
 								gallery = $temp$gallery;
 								continue update;
 							} else {
 								return _Utils_Tuple2(
-									A5(author$project$Gallery$Gallery, size, config, slides, currentSlide, author$project$Gallery$NotDragging),
+									A5(author$project$InfiniteGallery$Gallery, size, config, slides, currentSlide, author$project$InfiniteGallery$NotDragging),
 									elm$core$Platform$Cmd$none);
 							}
 						}
@@ -5152,15 +5152,15 @@ var author$project$Gallery$update = F2(
 					if (_Utils_cmp(
 						currentSlide,
 						elm$core$List$length(slides) - 1) > -1) {
-						var $temp$msg = author$project$Gallery$Batch(
+						var $temp$msg = author$project$InfiniteGallery$Batch(
 							_List_fromArray(
 								[
 									_Utils_Tuple2(
 									config.q,
-									author$project$Gallery$SetIndex(currentSlide + 1)),
+									author$project$InfiniteGallery$SetIndex(currentSlide + 1)),
 									_Utils_Tuple2(
 									frame,
-									author$project$Gallery$SetIndex(0))
+									author$project$InfiniteGallery$SetIndex(0))
 								])),
 							$temp$gallery = gallery;
 						msg = $temp$msg;
@@ -5168,20 +5168,20 @@ var author$project$Gallery$update = F2(
 						continue update;
 					} else {
 						return _Utils_Tuple2(
-							A5(author$project$Gallery$Gallery, size, config, slides, currentSlide + 1, author$project$Gallery$NotDragging),
+							A5(author$project$InfiniteGallery$Gallery, size, config, slides, currentSlide + 1, author$project$InfiniteGallery$NotDragging),
 							elm$core$Platform$Cmd$none);
 					}
 				case 4:
 					if (currentSlide <= 0) {
-						var $temp$msg = author$project$Gallery$Batch(
+						var $temp$msg = author$project$InfiniteGallery$Batch(
 							_List_fromArray(
 								[
 									_Utils_Tuple2(
 									300,
-									author$project$Gallery$SetIndex(currentSlide - 1)),
+									author$project$InfiniteGallery$SetIndex(currentSlide - 1)),
 									_Utils_Tuple2(
 									frame,
-									author$project$Gallery$SetIndex(
+									author$project$InfiniteGallery$SetIndex(
 										elm$core$List$length(slides) - 1))
 								])),
 							$temp$gallery = gallery;
@@ -5190,23 +5190,23 @@ var author$project$Gallery$update = F2(
 						continue update;
 					} else {
 						return _Utils_Tuple2(
-							A5(author$project$Gallery$Gallery, size, config, slides, currentSlide - 1, author$project$Gallery$NotDragging),
+							A5(author$project$InfiniteGallery$Gallery, size, config, slides, currentSlide - 1, author$project$InfiniteGallery$NotDragging),
 							elm$core$Platform$Cmd$none);
 					}
 				case 6:
 					var index = msg.a;
-					var $temp$msg = author$project$Gallery$Batch(
+					var $temp$msg = author$project$InfiniteGallery$Batch(
 						_List_fromArray(
 							[
 								_Utils_Tuple2(
 								frame,
-								author$project$Gallery$SetTransitionSpeed(0)),
+								author$project$InfiniteGallery$SetTransitionSpeed(0)),
 								_Utils_Tuple2(
 								frame,
-								author$project$Gallery$GoTo(index)),
+								author$project$InfiniteGallery$GoTo(index)),
 								_Utils_Tuple2(
 								frame,
-								author$project$Gallery$SetTransitionSpeed(config.q))
+								author$project$InfiniteGallery$SetTransitionSpeed(config.q))
 							])),
 						$temp$gallery = gallery;
 					msg = $temp$msg;
@@ -5215,13 +5215,13 @@ var author$project$Gallery$update = F2(
 				case 5:
 					var index = msg.a;
 					return _Utils_Tuple2(
-						A5(author$project$Gallery$Gallery, size, config, slides, index, author$project$Gallery$NotDragging),
+						A5(author$project$InfiniteGallery$Gallery, size, config, slides, index, author$project$InfiniteGallery$NotDragging),
 						elm$core$Platform$Cmd$none);
 				case 7:
 					var timeInMs = msg.a;
 					return _Utils_Tuple2(
 						A5(
-							author$project$Gallery$Gallery,
+							author$project$InfiniteGallery$Gallery,
 							size,
 							_Utils_update(
 								config,
@@ -5246,22 +5246,22 @@ var author$project$Gallery$update = F2(
 											A2(
 											wait,
 											ms,
-											author$project$Gallery$Batch(listOfCmds)),
+											author$project$InfiniteGallery$Batch(listOfCmds)),
 											cmd
 										]));
 							},
-							A2(author$project$Gallery$update, firstMsg, gallery));
+							A2(author$project$InfiniteGallery$update, firstMsg, gallery));
 					} else {
 						return _Utils_Tuple2(gallery, elm$core$Platform$Cmd$none);
 					}
 			}
 		}
 	});
-var author$project$Gallery$next = function (gallery) {
-	return A2(author$project$Gallery$update, author$project$Gallery$Next, gallery);
+var author$project$InfiniteGallery$next = function (gallery) {
+	return A2(author$project$InfiniteGallery$update, author$project$InfiniteGallery$Next, gallery);
 };
-var author$project$Gallery$previous = function (gallery) {
-	return A2(author$project$Gallery$update, author$project$Gallery$Previous, gallery);
+var author$project$InfiniteGallery$previous = function (gallery) {
+	return A2(author$project$InfiniteGallery$update, author$project$InfiniteGallery$Previous, gallery);
 };
 var elm$core$Platform$Cmd$map = _Platform_map;
 var elm$core$Tuple$mapBoth = F3(
@@ -5284,7 +5284,7 @@ var author$project$Example$update = F2(
 						return {t: a};
 					},
 					elm$core$Platform$Cmd$map(author$project$Example$MsgForGallery),
-					A2(author$project$Gallery$update, galleryMsg, gallery));
+					A2(author$project$InfiniteGallery$update, galleryMsg, gallery));
 			case 1:
 				return A3(
 					elm$core$Tuple$mapBoth,
@@ -5292,7 +5292,7 @@ var author$project$Example$update = F2(
 						return {t: a};
 					},
 					elm$core$Platform$Cmd$map(author$project$Example$MsgForGallery),
-					author$project$Gallery$previous(gallery));
+					author$project$InfiniteGallery$previous(gallery));
 			default:
 				return A3(
 					elm$core$Tuple$mapBoth,
@@ -5300,14 +5300,14 @@ var author$project$Example$update = F2(
 						return {t: a};
 					},
 					elm$core$Platform$Cmd$map(author$project$Example$MsgForGallery),
-					author$project$Gallery$next(gallery));
+					author$project$InfiniteGallery$next(gallery));
 		}
 	});
 var author$project$Example$Next = {$: 2};
 var author$project$Example$Previous = {$: 1};
 var elm$virtual_dom$VirtualDom$style = _VirtualDom_style;
 var elm$html$Html$Attributes$style = elm$virtual_dom$VirtualDom$style;
-var author$project$Gallery$dragOffset = function (dragState) {
+var author$project$InfiniteGallery$dragOffset = function (dragState) {
 	if (dragState.$ === 1) {
 		var startX = dragState.a;
 		var currentX = dragState.b;
@@ -5319,14 +5319,14 @@ var author$project$Gallery$dragOffset = function (dragState) {
 		return A2(elm$html$Html$Attributes$style, 'transform', 'translateX(0)');
 	}
 };
-var author$project$Gallery$isDragging = function (dragState) {
+var author$project$InfiniteGallery$isDragging = function (dragState) {
 	if (dragState.$ === 1) {
 		return true;
 	} else {
 		return false;
 	}
 };
-var author$project$Gallery$prefixClassName = F2(
+var author$project$InfiniteGallery$prefixClassName = F2(
 	function (_n0, className) {
 		var rootClassName = _n0.G;
 		return (className === '') ? rootClassName : A2(
@@ -5335,14 +5335,14 @@ var author$project$Gallery$prefixClassName = F2(
 			_List_fromArray(
 				[rootClassName, className]));
 	});
-var author$project$Gallery$DragAt = function (a) {
+var author$project$InfiniteGallery$DragAt = function (a) {
 	return {$: 1, a: a};
 };
-var author$project$Gallery$DragEnd = {$: 2};
-var author$project$Gallery$DragStart = function (a) {
+var author$project$InfiniteGallery$DragEnd = {$: 2};
+var author$project$InfiniteGallery$DragStart = function (a) {
 	return {$: 0, a: a};
 };
-var author$project$Gallery$PosX = elm$core$Basics$identity;
+var author$project$InfiniteGallery$PosX = elm$core$Basics$identity;
 var elm$json$Json$Decode$field = _Json_decodeField;
 var elm$json$Json$Decode$at = F2(
 	function (fields, decoder) {
@@ -5350,7 +5350,7 @@ var elm$json$Json$Decode$at = F2(
 	});
 var elm$json$Json$Decode$float = _Json_decodeFloat;
 var elm$json$Json$Decode$oneOf = _Json_oneOf;
-var author$project$Gallery$decodePosX = function () {
+var author$project$InfiniteGallery$decodePosX = function () {
 	var decoder = A2(
 		elm$json$Json$Decode$map,
 		elm$core$Basics$identity,
@@ -5390,20 +5390,20 @@ var elm$html$Html$Events$preventDefaultOn = F2(
 			event,
 			elm$virtual_dom$VirtualDom$MayPreventDefault(decoder));
 	});
-var author$project$Gallery$slidesEvents = function (dragState) {
+var author$project$InfiniteGallery$slidesEvents = function (dragState) {
 	return _Utils_ap(
 		_List_fromArray(
 			[
 				A2(
 				elm$html$Html$Events$on,
 				'mousedown',
-				A2(elm$json$Json$Decode$map, author$project$Gallery$DragStart, author$project$Gallery$decodePosX)),
+				A2(elm$json$Json$Decode$map, author$project$InfiniteGallery$DragStart, author$project$InfiniteGallery$decodePosX)),
 				A2(
 				elm$html$Html$Events$on,
 				'touchstart',
-				A2(elm$json$Json$Decode$map, author$project$Gallery$DragStart, author$project$Gallery$decodePosX))
+				A2(elm$json$Json$Decode$map, author$project$InfiniteGallery$DragStart, author$project$InfiniteGallery$decodePosX))
 			]),
-		author$project$Gallery$isDragging(dragState) ? _List_fromArray(
+		author$project$InfiniteGallery$isDragging(dragState) ? _List_fromArray(
 			[
 				A2(
 				elm$html$Html$Events$preventDefaultOn,
@@ -5412,10 +5412,10 @@ var author$project$Gallery$slidesEvents = function (dragState) {
 					elm$json$Json$Decode$map,
 					function (posX) {
 						return _Utils_Tuple2(
-							author$project$Gallery$DragAt(posX),
+							author$project$InfiniteGallery$DragAt(posX),
 							true);
 					},
-					author$project$Gallery$decodePosX)),
+					author$project$InfiniteGallery$decodePosX)),
 				A2(
 				elm$html$Html$Events$preventDefaultOn,
 				'touchmove',
@@ -5423,26 +5423,26 @@ var author$project$Gallery$slidesEvents = function (dragState) {
 					elm$json$Json$Decode$map,
 					function (posX) {
 						return _Utils_Tuple2(
-							author$project$Gallery$DragAt(posX),
+							author$project$InfiniteGallery$DragAt(posX),
 							true);
 					},
-					author$project$Gallery$decodePosX)),
+					author$project$InfiniteGallery$decodePosX)),
 				A2(
 				elm$html$Html$Events$on,
 				'mouseup',
-				elm$json$Json$Decode$succeed(author$project$Gallery$DragEnd)),
+				elm$json$Json$Decode$succeed(author$project$InfiniteGallery$DragEnd)),
 				A2(
 				elm$html$Html$Events$on,
 				'mouseleave',
-				elm$json$Json$Decode$succeed(author$project$Gallery$DragEnd)),
+				elm$json$Json$Decode$succeed(author$project$InfiniteGallery$DragEnd)),
 				A2(
 				elm$html$Html$Events$on,
 				'touchend',
-				elm$json$Json$Decode$succeed(author$project$Gallery$DragEnd)),
+				elm$json$Json$Decode$succeed(author$project$InfiniteGallery$DragEnd)),
 				A2(
 				elm$html$Html$Events$on,
 				'touchcancel',
-				elm$json$Json$Decode$succeed(author$project$Gallery$DragEnd))
+				elm$json$Json$Decode$succeed(author$project$InfiniteGallery$DragEnd))
 			]) : _List_Nil);
 };
 var elm$virtual_dom$VirtualDom$node = function (tag) {
@@ -5459,7 +5459,7 @@ var elm$html$Html$Attributes$stringProperty = F2(
 			elm$json$Json$Encode$string(string));
 	});
 var elm$html$Html$Attributes$type_ = elm$html$Html$Attributes$stringProperty('type');
-var author$project$Gallery$viewStylesheet = function (gallery) {
+var author$project$InfiniteGallery$viewStylesheet = function (gallery) {
 	var size = gallery.a;
 	var config = gallery.b;
 	var slides = gallery.c;
@@ -5473,7 +5473,7 @@ var author$project$Gallery$viewStylesheet = function (gallery) {
 				return a + '}';
 			}(
 				_Utils_ap(
-					'#' + (config.F + (' .' + (A2(author$project$Gallery$prefixClassName, config, className) + ' { '))),
+					'#' + (config.F + (' .' + (A2(author$project$InfiniteGallery$prefixClassName, config, className) + ' { '))),
 					A2(
 						elm$core$String$join,
 						';',
@@ -5604,7 +5604,7 @@ var elm$html$Html$Attributes$classList = function (classes) {
 				A2(elm$core$List$filter, elm$core$Tuple$second, classes))));
 };
 var elm$html$Html$Attributes$id = elm$html$Html$Attributes$stringProperty('id');
-var author$project$Gallery$view = function (gallery) {
+var author$project$InfiniteGallery$view = function (gallery) {
 	var size = gallery.a;
 	var config = gallery.b;
 	var slides = gallery.c;
@@ -5616,7 +5616,7 @@ var author$project$Gallery$view = function (gallery) {
 			_List_fromArray(
 				[
 					elm$html$Html$Attributes$class(
-					A2(author$project$Gallery$prefixClassName, config, 'Slides_Slide'))
+					A2(author$project$InfiniteGallery$prefixClassName, config, 'Slides_Slide'))
 				]),
 			_List_fromArray(
 				[slideHtml]));
@@ -5632,13 +5632,13 @@ var author$project$Gallery$view = function (gallery) {
 			]),
 		_List_fromArray(
 			[
-				author$project$Gallery$viewStylesheet(gallery),
+				author$project$InfiniteGallery$viewStylesheet(gallery),
 				A2(
 				elm$html$Html$div,
 				_List_fromArray(
 					[
 						elm$html$Html$Attributes$class(
-						A2(author$project$Gallery$prefixClassName, config, 'Wrapper'))
+						A2(author$project$InfiniteGallery$prefixClassName, config, 'Wrapper'))
 					]),
 				_List_fromArray(
 					[
@@ -5648,17 +5648,17 @@ var author$project$Gallery$view = function (gallery) {
 							_List_fromArray(
 								[
 									elm$html$Html$Attributes$class(
-									A2(author$project$Gallery$prefixClassName, config, 'Slides')),
+									A2(author$project$InfiniteGallery$prefixClassName, config, 'Slides')),
 									elm$html$Html$Attributes$classList(
 									_List_fromArray(
 										[
 											_Utils_Tuple2(
-											A2(author$project$Gallery$prefixClassName, config, 'Slides--dragging'),
-											author$project$Gallery$isDragging(dragState))
+											A2(author$project$InfiniteGallery$prefixClassName, config, 'Slides--dragging'),
+											author$project$InfiniteGallery$isDragging(dragState))
 										])),
-									author$project$Gallery$dragOffset(dragState)
+									author$project$InfiniteGallery$dragOffset(dragState)
 								]),
-							author$project$Gallery$slidesEvents(dragState)),
+							author$project$InfiniteGallery$slidesEvents(dragState)),
 						A2(
 							elm$core$List$map,
 							viewSlide,
@@ -5742,7 +5742,7 @@ var author$project$Example$view = function (_n0) {
 				A2(
 				elm$html$Html$map,
 				author$project$Example$MsgForGallery,
-				author$project$Gallery$view(gallery)),
+				author$project$InfiniteGallery$view(gallery)),
 				A2(
 				elm$html$Html$button,
 				_List_fromArray(

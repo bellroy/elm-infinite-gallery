@@ -1,10 +1,10 @@
 module Example exposing (main)
 
 import Browser exposing (element)
-import Gallery as Gallery
 import Html exposing (Html, a, button, div, h1, map, p, text)
 import Html.Attributes exposing (attribute, href)
 import Html.Events exposing (onClick)
+import InfiniteGallery as Gallery
 
 
 type alias Model =
