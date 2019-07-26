@@ -13,7 +13,7 @@ Clone the repository and open up docs/index.html to see a Demo
 Please have a look at the example/src/Main.elm file for a minimal example.
 
 ## Docs
-Documentation is available on the [elm packages website](https://package.elm-lang.org/packages/tricycle/elm-infnite-gallery/latest/).
+Documentation is available on the [elm packages website](https://package.elm-lang.org/packages/tricycle/elm-infinite-gallery/latest/).
 
 ## ToDo
 - [ ] Add keyboard navigation
