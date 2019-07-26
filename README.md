@@ -7,7 +7,7 @@ Slides can be any Html content desired.
 Create a simple abstract gallery that supports swipe, infinite scroll and custom Html slides.
 
 ## Demo
-Clone the repository and open up docs/index.html to see a Demo
+[Demo](https://tricycle.github.io/elm-infinite-gallery/)
 
 ## Usage Example
 Please have a look at the example/src/Main.elm file for a minimal example.
