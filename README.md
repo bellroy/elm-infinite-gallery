@@ -1,4 +1,4 @@
-# elm-infnite-gallery
+# elm-infinite-gallery
 
 A simple gallery that supports infinite scrolling.
 Slides can be any Html content desired.
