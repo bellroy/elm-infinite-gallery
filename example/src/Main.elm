@@ -61,11 +61,11 @@ update msg { gallery } =
 view : Model -> Html Msg
 view { gallery } =
     div []
-        [ h1 [] [ text "Elm Inifite Gallery Example" ]
+        [ h1 [] [ text "Elm Infinite Gallery Example" ]
         , p []
-            [ a [ href "https://github.com/tricycle/elm-infnite-gallery" ] [ text "view source" ]
+            [ a [ href "https://github.com/tricycle/elm-infinite-gallery" ] [ text "view source" ]
             , text " "
-            , a [ href "https://package.elm-lang.org/packages/tricycle/elm-infnite-gallery/latest/" ] [ text "view documentation" ]
+            , a [ href "https://package.elm-lang.org/packages/tricycle/elm-infinite-gallery/latest/" ] [ text "view documentation" ]
             ]
         , Gallery.view gallery
             |> Html.map MsgForGallery
