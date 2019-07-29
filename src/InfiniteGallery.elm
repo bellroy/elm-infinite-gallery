@@ -436,6 +436,8 @@ viewStylesheet ((Gallery size config slides currentSlide dragState) as gallery) 
                 , ( "max-height", "100%" )
                 , ( "overflow", "hidden" )
                 , ( "position", "relative" )
+                , ( "user-drag", "none" )
+                , ( "user-select", "none" )
                 ]
               )
             ]
