@@ -2,6 +2,7 @@ module InfiniteGallery exposing
     ( Config, defaultConfig
     , init, update, view
     , previous, next, goTo, setIndex
+    , getCurrentIndex
     , Gallery, Msg
     )
 
@@ -21,6 +22,11 @@ module InfiniteGallery exposing
 # Control
 
 @docs previous, next, goTo, setIndex
+
+
+# Retrieve
+
+@docs getCurrentIndex
 
 
 # Definitions
@@ -269,6 +275,13 @@ setIndex index gallery =
     update (SetIndex index) gallery
 
 
+{-| Retrieve the current displayed Slide index
+-}
+getCurrentIndex : Gallery -> Int
+getCurrentIndex (Gallery _ _ _ currentSlide _) =
+    currentSlide
+
+
 {-| Render your gallery
 e.g.
 
@@ -438,6 +451,9 @@ viewStylesheet ((Gallery size config slides currentSlide dragState) as gallery) 
                 , ( "position", "relative" )
                 , ( "user-drag", "none" )
                 , ( "user-select", "none" )
+                , ( "-webkit-user-select", "none" )
+                , ( "-moz-user-select", "none" )
+                , ( "-ms-user-select", "none" )
                 ]
               )
             ]
