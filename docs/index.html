@@ -5459,15 +5459,17 @@ var elm$html$Html$Attributes$stringProperty = F2(
 			elm$json$Json$Encode$string(string));
 	});
 var elm$html$Html$Attributes$type_ = elm$html$Html$Attributes$stringProperty('type');
+var elm$virtual_dom$VirtualDom$lazy2 = _VirtualDom_lazy2;
+var elm$html$Html$Lazy$lazy2 = elm$virtual_dom$VirtualDom$lazy2;
 var author$project$InfiniteGallery$viewStylesheet = function (gallery) {
 	var size = gallery.a;
 	var config = gallery.b;
 	var slides = gallery.c;
 	var currentSlide = gallery.d;
 	var dragState = gallery.e;
-	var renderStyleBlock = function (_n1) {
-		var className = _n1.a;
-		var rules = _n1.b;
+	var renderStyleBlock = function (_n3) {
+		var className = _n3.a;
+		var rules = _n3.b;
 		return elm$html$Html$text(
 			function (a) {
 				return a + '}';
@@ -5479,9 +5481,9 @@ var author$project$InfiniteGallery$viewStylesheet = function (gallery) {
 						';',
 						A2(
 							elm$core$List$map,
-							function (_n0) {
-								var a = _n0.a;
-								var b = _n0.b;
+							function (_n2) {
+								var a = _n2.a;
+								var b = _n2.b;
 								return A2(
 									elm$core$String$join,
 									':',
@@ -5547,13 +5549,20 @@ var author$project$InfiniteGallery$viewStylesheet = function (gallery) {
 				]))
 		]);
 	return A3(
-		elm$html$Html$node,
-		'style',
-		_List_fromArray(
-			[
-				elm$html$Html$Attributes$type_('text/css')
-			]),
-		A2(elm$core$List$map, renderStyleBlock, styles));
+		elm$html$Html$Lazy$lazy2,
+		F2(
+			function (_n0, _n1) {
+				return A3(
+					elm$html$Html$node,
+					'style',
+					_List_fromArray(
+						[
+							elm$html$Html$Attributes$type_('text/css')
+						]),
+					A2(elm$core$List$map, renderStyleBlock, styles));
+			}),
+		currentSlide,
+		amountOfSlides);
 };
 var elm$core$List$maybeCons = F3(
 	function (f, mx, xs) {

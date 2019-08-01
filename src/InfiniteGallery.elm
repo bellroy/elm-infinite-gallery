@@ -38,6 +38,7 @@ module InfiniteGallery exposing
 import Html exposing (Attribute, Html, div, node, text)
 import Html.Attributes exposing (class, classList, id, style, type_)
 import Html.Events exposing (on, preventDefaultOn)
+import Html.Lazy exposing (lazy2)
 import Json.Decode as Decode exposing (at, field, float, map, oneOf)
 import Process exposing (sleep)
 import Task exposing (perform)
@@ -465,7 +466,13 @@ viewStylesheet ((Gallery size config slides currentSlide dragState) as gallery) 
                 |> (\a -> a ++ "}")
                 |> text
     in
-    node "style"
-        [ type_ "text/css" ]
-    <|
-        List.map renderStyleBlock styles
+    lazy2
+        (\_ _ ->
+            node
+                "style"
+                [ type_ "text/css" ]
+            <|
+                List.map renderStyleBlock styles
+        )
+        currentSlide
+        amountOfSlides

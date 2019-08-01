@@ -3,7 +3,7 @@
     "name": "tricycle/elm-infinite-gallery",
     "summary": "A simple gallery that supports infinite scrolling",
     "license": "BSD-3-Clause",
-    "version": "1.1.0",
+    "version": "1.1.1",
     "exposed-modules": [
         "InfiniteGallery"
     ],
