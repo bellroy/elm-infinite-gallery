@@ -4869,9 +4869,21 @@ var author$project$InfiniteGallery$Gallery = F5(
 		return {$: 0, a: a, b: b, c: c, d: d, e: e};
 	});
 var author$project$InfiniteGallery$NotDragging = {$: 0};
-var author$project$InfiniteGallery$init = F3(
-	function (size, config, slides) {
-		return A5(author$project$InfiniteGallery$Gallery, size, config, slides, 0, author$project$InfiniteGallery$NotDragging);
+var elm$core$Basics$composeL = F3(
+	function (g, f, x) {
+		return g(
+			f(x));
+	});
+var elm$core$Tuple$pair = F2(
+	function (a, b) {
+		return _Utils_Tuple2(a, b);
+	});
+var author$project$InfiniteGallery$init = F2(
+	function (size, config) {
+		return A2(
+			elm$core$Basics$composeL,
+			A4(author$project$InfiniteGallery$Gallery, size, config, 0, author$project$InfiniteGallery$NotDragging),
+			elm$core$List$indexedMap(elm$core$Tuple$pair));
 	});
 var elm$core$List$foldrHelper = F4(
 	function (fn, acc, ctr, ls) {
@@ -5079,9 +5091,9 @@ var author$project$InfiniteGallery$update = F2(
 		while (true) {
 			var size = gallery.a;
 			var config = gallery.b;
-			var slides = gallery.c;
-			var currentSlide = gallery.d;
-			var dragState = gallery.e;
+			var currentSlide = gallery.c;
+			var dragState = gallery.d;
+			var slides = gallery.e;
 			var wait = F2(
 				function (ms, msg_) {
 					return A2(
@@ -5098,9 +5110,9 @@ var author$project$InfiniteGallery$update = F2(
 							author$project$InfiniteGallery$Gallery,
 							size,
 							config,
-							slides,
 							currentSlide,
-							A2(author$project$InfiniteGallery$Dragging, posX, posX)),
+							A2(author$project$InfiniteGallery$Dragging, posX, posX),
+							slides),
 						elm$core$Platform$Cmd$none);
 				case 1:
 					var posX = msg.a;
@@ -5113,15 +5125,15 @@ var author$project$InfiniteGallery$update = F2(
 								author$project$InfiniteGallery$Gallery,
 								size,
 								config,
-								slides,
 								currentSlide,
-								A2(author$project$InfiniteGallery$Dragging, startX, posX)),
+								A2(author$project$InfiniteGallery$Dragging, startX, posX),
+								slides),
 							elm$core$Platform$Cmd$none);
 					}
 				case 2:
 					if (!dragState.$) {
 						return _Utils_Tuple2(
-							A5(author$project$InfiniteGallery$Gallery, size, config, slides, currentSlide, author$project$InfiniteGallery$NotDragging),
+							A5(author$project$InfiniteGallery$Gallery, size, config, currentSlide, author$project$InfiniteGallery$NotDragging, slides),
 							elm$core$Platform$Cmd$none);
 					} else {
 						var startX = dragState.a;
@@ -5143,7 +5155,7 @@ var author$project$InfiniteGallery$update = F2(
 								continue update;
 							} else {
 								return _Utils_Tuple2(
-									A5(author$project$InfiniteGallery$Gallery, size, config, slides, currentSlide, author$project$InfiniteGallery$NotDragging),
+									A5(author$project$InfiniteGallery$Gallery, size, config, currentSlide, author$project$InfiniteGallery$NotDragging, slides),
 									elm$core$Platform$Cmd$none);
 							}
 						}
@@ -5168,7 +5180,7 @@ var author$project$InfiniteGallery$update = F2(
 						continue update;
 					} else {
 						return _Utils_Tuple2(
-							A5(author$project$InfiniteGallery$Gallery, size, config, slides, currentSlide + 1, author$project$InfiniteGallery$NotDragging),
+							A5(author$project$InfiniteGallery$Gallery, size, config, currentSlide + 1, author$project$InfiniteGallery$NotDragging, slides),
 							elm$core$Platform$Cmd$none);
 					}
 				case 4:
@@ -5190,7 +5202,7 @@ var author$project$InfiniteGallery$update = F2(
 						continue update;
 					} else {
 						return _Utils_Tuple2(
-							A5(author$project$InfiniteGallery$Gallery, size, config, slides, currentSlide - 1, author$project$InfiniteGallery$NotDragging),
+							A5(author$project$InfiniteGallery$Gallery, size, config, currentSlide - 1, author$project$InfiniteGallery$NotDragging, slides),
 							elm$core$Platform$Cmd$none);
 					}
 				case 6:
@@ -5215,7 +5227,7 @@ var author$project$InfiniteGallery$update = F2(
 				case 5:
 					var index = msg.a;
 					return _Utils_Tuple2(
-						A5(author$project$InfiniteGallery$Gallery, size, config, slides, index, author$project$InfiniteGallery$NotDragging),
+						A5(author$project$InfiniteGallery$Gallery, size, config, index, author$project$InfiniteGallery$NotDragging, slides),
 						elm$core$Platform$Cmd$none);
 				case 7:
 					var timeInMs = msg.a;
@@ -5226,9 +5238,9 @@ var author$project$InfiniteGallery$update = F2(
 							_Utils_update(
 								config,
 								{q: timeInMs}),
-							slides,
 							currentSlide,
-							dragState),
+							dragState,
+							slides),
 						elm$core$Platform$Cmd$none);
 				default:
 					if (msg.a.b) {
@@ -5311,12 +5323,15 @@ var author$project$InfiniteGallery$dragOffset = function (dragState) {
 	if (dragState.$ === 1) {
 		var startX = dragState.a;
 		var currentX = dragState.b;
-		return A2(
-			elm$html$Html$Attributes$style,
-			'transform',
-			'translateX(' + (elm$core$String$fromInt(currentX - startX) + 'px)'));
+		return (!(currentX - startX)) ? _List_Nil : _List_fromArray(
+			[
+				A2(
+				elm$html$Html$Attributes$style,
+				'transform',
+				'translateX(' + (elm$core$String$fromInt(currentX - startX) + 'px)'))
+			]);
 	} else {
-		return A2(elm$html$Html$Attributes$style, 'transform', 'translateX(0)');
+		return _List_Nil;
 	}
 };
 var author$project$InfiniteGallery$isDragging = function (dragState) {
@@ -5464,9 +5479,9 @@ var elm$html$Html$Lazy$lazy2 = elm$virtual_dom$VirtualDom$lazy2;
 var author$project$InfiniteGallery$viewStylesheet = function (gallery) {
 	var size = gallery.a;
 	var config = gallery.b;
-	var slides = gallery.c;
-	var currentSlide = gallery.d;
-	var dragState = gallery.e;
+	var currentSlide = gallery.c;
+	var dragState = gallery.d;
+	var slides = gallery.e;
 	var renderStyleBlock = function (_n3) {
 		var className = _n3.a;
 		var rules = _n3.b;
@@ -5621,16 +5636,26 @@ var elm$html$Html$Attributes$id = elm$html$Html$Attributes$stringProperty('id');
 var author$project$InfiniteGallery$view = function (gallery) {
 	var size = gallery.a;
 	var config = gallery.b;
-	var slides = gallery.c;
-	var currentSlide = gallery.d;
-	var dragState = gallery.e;
-	var viewSlide = function (slideHtml) {
+	var currentSlide = gallery.c;
+	var dragState = gallery.d;
+	var slides = gallery.e;
+	var viewSlide = function (_n0) {
+		var index = _n0.a;
+		var slideHtml = _n0.b;
 		return A2(
 			elm$html$Html$div,
 			_List_fromArray(
 				[
-					elm$html$Html$Attributes$class(
-					A2(author$project$InfiniteGallery$prefixClassName, config, 'Slides_Slide'))
+					elm$html$Html$Attributes$classList(
+					_List_fromArray(
+						[
+							_Utils_Tuple2(
+							A2(author$project$InfiniteGallery$prefixClassName, config, 'Slides_Slide'),
+							true),
+							_Utils_Tuple2(
+							'active',
+							_Utils_eq(currentSlide, index))
+						]))
 				]),
 			_List_fromArray(
 				[slideHtml]));
@@ -5669,10 +5694,11 @@ var author$project$InfiniteGallery$view = function (gallery) {
 											_Utils_Tuple2(
 											A2(author$project$InfiniteGallery$prefixClassName, config, 'Slides--dragging'),
 											author$project$InfiniteGallery$isDragging(dragState))
-										])),
-									author$project$InfiniteGallery$dragOffset(dragState)
+										]))
 								]),
-							author$project$InfiniteGallery$slidesEvents(dragState)),
+							_Utils_ap(
+								author$project$InfiniteGallery$slidesEvents(dragState),
+								author$project$InfiniteGallery$dragOffset(dragState))),
 						A2(
 							elm$core$List$map,
 							viewSlide,
