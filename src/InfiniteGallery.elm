@@ -48,7 +48,7 @@ import Task exposing (perform)
 You can create a new Gallery using the init function.
 -}
 type Gallery
-    = Gallery Size Config Slides CurrentSlide DragState
+    = Gallery Size Config CurrentSlide DragState Slides
 
 
 {-| The configuration options of a Gallery.
@@ -81,10 +81,10 @@ type alias Size =
     }
 
 
-{-| Slides are just a List of Html elements
+{-| Slides are a List of their Index and Html elements
 -}
 type alias Slides =
-    List (Html Msg)
+    List ( Int, Html Msg )
 
 
 {-| The current active slide
@@ -127,8 +127,9 @@ init :
     -> Config
     -> List (Html Msg)
     -> Gallery
-init size config slides =
-    Gallery size config slides 0 NotDragging
+init size config =
+    Gallery size config 0 NotDragging
+        << List.indexedMap Tuple.pair
 
 
 {-| Update the gallery with given Msg.
@@ -147,7 +148,7 @@ Example:
 
 -}
 update : Msg -> Gallery -> ( Gallery, Cmd Msg )
-update msg ((Gallery size config slides currentSlide dragState) as gallery) =
+update msg ((Gallery size config currentSlide dragState slides) as gallery) =
     let
         wait ms msg_ =
             perform (always msg_) (sleep ms)
@@ -157,7 +158,7 @@ update msg ((Gallery size config slides currentSlide dragState) as gallery) =
     in
     case msg of
         DragStart posX ->
-            ( Gallery size config slides currentSlide (Dragging posX posX)
+            ( Gallery size config currentSlide (Dragging posX posX) slides
             , Cmd.none
             )
 
@@ -167,14 +168,14 @@ update msg ((Gallery size config slides currentSlide dragState) as gallery) =
                     ( gallery, Cmd.none )
 
                 Dragging startX _ ->
-                    ( Gallery size config slides currentSlide (Dragging startX posX)
+                    ( Gallery size config currentSlide (Dragging startX posX) slides
                     , Cmd.none
                     )
 
         DragEnd ->
             case dragState of
                 NotDragging ->
-                    ( Gallery size config slides currentSlide NotDragging
+                    ( Gallery size config currentSlide NotDragging slides
                     , Cmd.none
                     )
 
@@ -186,7 +187,7 @@ update msg ((Gallery size config slides currentSlide dragState) as gallery) =
                         update Previous gallery
 
                     else
-                        ( Gallery size config slides currentSlide NotDragging
+                        ( Gallery size config currentSlide NotDragging slides
                         , Cmd.none
                         )
 
@@ -201,7 +202,7 @@ update msg ((Gallery size config slides currentSlide dragState) as gallery) =
                     gallery
 
             else
-                ( Gallery size config slides (currentSlide + 1) NotDragging
+                ( Gallery size config (currentSlide + 1) NotDragging slides
                 , Cmd.none
                 )
 
@@ -216,7 +217,7 @@ update msg ((Gallery size config slides currentSlide dragState) as gallery) =
                     gallery
 
             else
-                ( Gallery size config slides (currentSlide - 1) NotDragging
+                ( Gallery size config (currentSlide - 1) NotDragging slides
                 , Cmd.none
                 )
 
@@ -231,12 +232,12 @@ update msg ((Gallery size config slides currentSlide dragState) as gallery) =
                 gallery
 
         GoTo index ->
-            ( Gallery size config slides index NotDragging
+            ( Gallery size config index NotDragging slides
             , Cmd.none
             )
 
         SetTransitionSpeed timeInMs ->
-            ( Gallery size { config | transitionSpeed = timeInMs } slides currentSlide dragState
+            ( Gallery size { config | transitionSpeed = timeInMs } currentSlide dragState slides
             , Cmd.none
             )
 
@@ -279,7 +280,7 @@ setIndex index gallery =
 {-| Retrieve the current displayed Slide index
 -}
 getCurrentIndex : Gallery -> Int
-getCurrentIndex (Gallery _ _ _ currentSlide _) =
+getCurrentIndex (Gallery _ _ currentSlide _ _) =
     currentSlide
 
 
@@ -300,10 +301,15 @@ Example:
 
 -}
 view : Gallery -> Html Msg
-view ((Gallery size config slides currentSlide dragState) as gallery) =
+view ((Gallery size config currentSlide dragState slides) as gallery) =
     let
-        viewSlide slideHtml =
-            div [ class <| prefixClassName config "Slides_Slide" ]
+        viewSlide ( index, slideHtml ) =
+            div
+                [ classList
+                    [ ( prefixClassName config "Slides_Slide", True )
+                    , ( "active", currentSlide == index )
+                    ]
+                ]
                 [ slideHtml
                 ]
     in
@@ -413,7 +419,7 @@ prefixClassName { rootClassName } className =
 {-| Render the Gallery's stylesheet
 -}
 viewStylesheet : Gallery -> Html Msg
-viewStylesheet ((Gallery size config slides currentSlide dragState) as gallery) =
+viewStylesheet ((Gallery size config currentSlide dragState slides) as gallery) =
     let
         amountOfSlides =
             List.length slides + 2
