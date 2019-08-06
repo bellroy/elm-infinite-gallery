@@ -328,9 +328,9 @@ view ((Gallery size config currentSlide dragState slides) as gallery) =
                       , isDragging dragState
                       )
                     ]
-                 , dragOffset dragState
                  ]
                     ++ slidesEvents dragState
+                    ++ dragOffset dragState
                 )
               <|
                 List.map viewSlide <|
@@ -357,14 +357,18 @@ isDragging dragState =
 
 {-| Apply the users drag offset based on the dragState
 -}
-dragOffset : DragState -> Attribute Msg
+dragOffset : DragState -> List (Attribute Msg)
 dragOffset dragState =
     case dragState of
         Dragging (PosX startX) (PosX currentX) ->
-            style "transform" ("translateX(" ++ String.fromInt (currentX - startX) ++ "px)")
+            if (currentX - startX) == 0 then
+                []
+
+            else
+                [ style "transform" ("translateX(" ++ String.fromInt (currentX - startX) ++ "px)") ]
 
         NotDragging ->
-            style "transform" "translateX(0)"
+            []
 
 
 {-| Create all the slider listeners required to handle the DragState |
