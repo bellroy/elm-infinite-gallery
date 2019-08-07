@@ -362,13 +362,13 @@ dragOffset dragState =
     case dragState of
         Dragging (PosX startX) (PosX currentX) ->
             if (currentX - startX) == 0 then
-                []
+                [ style "transform" "translateX(0)" ]
 
             else
                 [ style "transform" ("translateX(" ++ String.fromInt (currentX - startX) ++ "px)") ]
 
         NotDragging ->
-            []
+            [ style "transform" "translateX(0)" ]
 
 
 {-| Create all the slider listeners required to handle the DragState |

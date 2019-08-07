@@ -5323,7 +5323,10 @@ var author$project$InfiniteGallery$dragOffset = function (dragState) {
 	if (dragState.$ === 1) {
 		var startX = dragState.a;
 		var currentX = dragState.b;
-		return (!(currentX - startX)) ? _List_Nil : _List_fromArray(
+		return (!(currentX - startX)) ? _List_fromArray(
+			[
+				A2(elm$html$Html$Attributes$style, 'transform', 'translateX(0)')
+			]) : _List_fromArray(
 			[
 				A2(
 				elm$html$Html$Attributes$style,
@@ -5331,7 +5334,10 @@ var author$project$InfiniteGallery$dragOffset = function (dragState) {
 				'translateX(' + (elm$core$String$fromInt(currentX - startX) + 'px)'))
 			]);
 	} else {
-		return _List_Nil;
+		return _List_fromArray(
+			[
+				A2(elm$html$Html$Attributes$style, 'transform', 'translateX(0)')
+			]);
 	}
 };
 var author$project$InfiniteGallery$isDragging = function (dragState) {
