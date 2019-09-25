@@ -29,8 +29,15 @@ main =
 
 init : () -> ( Model, Cmd Msg )
 init _ =
+    let
+        size =
+            { width = "auto", height = "500px" }
+
+        config =
+            Gallery.defaultConfig
+    in
     ( List.map viewSlide (List.range 0 4)
-        |> Gallery.init { width = "auto", height = "500px" } Gallery.defaultConfig
+        |> Gallery.init size config
         |> Model
     , Cmd.none
     )

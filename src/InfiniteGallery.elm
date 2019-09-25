@@ -58,6 +58,7 @@ type alias Config =
     { rootClassName : String
     , id : String
     , transitionSpeed : Int
+    , enableDrag : Bool
     , swipeOffset : Int
     }
 
@@ -66,9 +67,10 @@ type alias Config =
 -}
 defaultConfig : Config
 defaultConfig =
-    { rootClassName = "BellroyGallery"
-    , id = "Gallery_0"
+    { rootClassName = "InfiniteGallery"
+    , id = "InfiniteGallery0"
     , transitionSpeed = 300
+    , enableDrag = False
     , swipeOffset = 150
     }
 
@@ -329,7 +331,7 @@ view ((Gallery size config currentSlide dragState slides) as gallery) =
                       )
                     ]
                  ]
-                    ++ slidesEvents dragState
+                    ++ slidesEvents config.enableDrag dragState
                     ++ dragOffset dragState
                 )
               <|
@@ -373,25 +375,29 @@ dragOffset dragState =
 
 {-| Create all the slider listeners required to handle the DragState |
 -}
-slidesEvents : DragState -> List (Attribute Msg)
-slidesEvents dragState =
-    [ on "mousedown" (Decode.map DragStart decodePosX)
-    , on "touchstart" (Decode.map DragStart decodePosX)
-    ]
-        ++ (if isDragging dragState then
-                [ preventDefaultOn "mousemove"
-                    (Decode.map (\posX -> ( DragAt posX, True )) decodePosX)
-                , preventDefaultOn "touchmove"
-                    (Decode.map (\posX -> ( DragAt posX, True )) decodePosX)
-                , on "mouseup" (Decode.succeed DragEnd)
-                , on "mouseleave" (Decode.succeed DragEnd)
-                , on "touchend" (Decode.succeed DragEnd)
-                , on "touchcancel" (Decode.succeed DragEnd)
-                ]
+slidesEvents : Bool -> DragState -> List (Attribute Msg)
+slidesEvents enableDrag dragState =
+    if not enableDrag then
+        []
 
-            else
-                []
-           )
+    else
+        [ on "mousedown" (Decode.map DragStart decodePosX)
+        , on "touchstart" (Decode.map DragStart decodePosX)
+        ]
+            ++ (if isDragging dragState then
+                    [ preventDefaultOn "mousemove"
+                        (Decode.map (\posX -> ( DragAt posX, True )) decodePosX)
+                    , preventDefaultOn "touchmove"
+                        (Decode.map (\posX -> ( DragAt posX, True )) decodePosX)
+                    , on "mouseup" (Decode.succeed DragEnd)
+                    , on "mouseleave" (Decode.succeed DragEnd)
+                    , on "touchend" (Decode.succeed DragEnd)
+                    , on "touchcancel" (Decode.succeed DragEnd)
+                    ]
+
+                else
+                    []
+               )
 
 
 {-| Extract the PosX from a mouse or touch event
@@ -423,7 +429,7 @@ prefixClassName { rootClassName } className =
 {-| Render the Gallery's stylesheet
 -}
 viewStylesheet : Gallery -> Html Msg
-viewStylesheet ((Gallery size config currentSlide dragState slides) as gallery) =
+viewStylesheet (Gallery _ config currentSlide _ slides) =
     let
         amountOfSlides =
             List.length slides + 2
