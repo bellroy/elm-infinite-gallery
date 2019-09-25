@@ -70,7 +70,7 @@ defaultConfig =
     { rootClassName = "InfiniteGallery"
     , id = "InfiniteGallery0"
     , transitionSpeed = 300
-    , enableDrag = False
+    , enableDrag = True
     , swipeOffset = 150
     }
 
