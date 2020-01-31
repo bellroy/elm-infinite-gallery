@@ -48,7 +48,7 @@ import Task exposing (perform)
 You can create a new Gallery using the init function.
 -}
 type Gallery
-    = Gallery Size Config CurrentSlide DragState Slides
+    = Gallery Size Config CurrentSlide DragState Slides TransitionSpeed
 
 
 {-| The configuration options of a Gallery.
@@ -57,7 +57,7 @@ These can be passed in while initializing a new Gallery.
 type alias Config =
     { rootClassName : String
     , id : String
-    , transitionSpeed : Int
+    , transitionSpeedWhenAdvancing : TransitionSpeed
     , enableDrag : Bool
     , swipeOffset : Int
     }
@@ -69,7 +69,7 @@ defaultConfig : Config
 defaultConfig =
     { rootClassName = "InfiniteGallery"
     , id = "InfiniteGallery0"
-    , transitionSpeed = 300
+    , transitionSpeedWhenAdvancing = TransitionSpeed 300
     , enableDrag = True
     , swipeOffset = 150
     }
@@ -108,6 +108,12 @@ type PosX
     = PosX Int
 
 
+{-| A number of milliseconds to spend transitioning between indices.
+-}
+type TransitionSpeed
+    = TransitionSpeed Int
+
+
 {-| The Gallery's internal Msg's
 -}
 type Msg
@@ -118,8 +124,8 @@ type Msg
     | Previous
     | GoTo Int
     | SetIndex Int
-    | SetTransitionSpeed Int
-    | Batch (List ( Float, Msg ))
+    | SetTransitionSpeed TransitionSpeed
+    | Batch (List ( TransitionSpeed, Msg ))
 
 
 {-| Create a new Gallery, with given size, config and slides
@@ -129,9 +135,14 @@ init :
     -> Config
     -> List (Html Msg)
     -> Gallery
-init size config =
-    Gallery size config 0 NotDragging
-        << List.indexedMap Tuple.pair
+init size config slides =
+    Gallery
+        size
+        config
+        0
+        NotDragging
+        (List.indexedMap Tuple.pair slides)
+        config.transitionSpeedWhenAdvancing
 
 
 {-| Update the gallery with given Msg.
@@ -150,17 +161,17 @@ Example:
 
 -}
 update : Msg -> Gallery -> ( Gallery, Cmd Msg )
-update msg ((Gallery size config currentSlide dragState slides) as gallery) =
+update msg ((Gallery size config currentSlide dragState slides transitionSpeed) as gallery) =
     let
         wait ms msg_ =
             perform (always msg_) (sleep ms)
 
         frame =
-            1000 / 30
+            TransitionSpeed (1000 // 30)
     in
     case msg of
         DragStart posX ->
-            ( Gallery size config currentSlide (Dragging posX posX) slides
+            ( Gallery size config currentSlide (Dragging posX posX) slides transitionSpeed
             , Cmd.none
             )
 
@@ -170,14 +181,14 @@ update msg ((Gallery size config currentSlide dragState slides) as gallery) =
                     ( gallery, Cmd.none )
 
                 Dragging startX _ ->
-                    ( Gallery size config currentSlide (Dragging startX posX) slides
+                    ( Gallery size config currentSlide (Dragging startX posX) slides transitionSpeed
                     , Cmd.none
                     )
 
         DragEnd ->
             case dragState of
                 NotDragging ->
-                    ( Gallery size config currentSlide NotDragging slides
+                    ( Gallery size config currentSlide NotDragging slides transitionSpeed
                     , Cmd.none
                     )
 
@@ -189,7 +200,7 @@ update msg ((Gallery size config currentSlide dragState slides) as gallery) =
                         update Previous gallery
 
                     else
-                        ( Gallery size config currentSlide NotDragging slides
+                        ( Gallery size config currentSlide NotDragging slides transitionSpeed
                         , Cmd.none
                         )
 
@@ -197,14 +208,14 @@ update msg ((Gallery size config currentSlide dragState slides) as gallery) =
             if currentSlide >= (List.length slides - 1) then
                 update
                     (Batch
-                        [ ( 300, SetIndex (currentSlide + 1) )
+                        [ ( config.transitionSpeedWhenAdvancing, SetIndex (currentSlide + 1) )
                         , ( frame, SetIndex 0 )
                         ]
                     )
                     gallery
 
             else
-                ( Gallery size config (currentSlide + 1) NotDragging slides
+                ( Gallery size config (currentSlide + 1) NotDragging slides transitionSpeed
                 , Cmd.none
                 )
 
@@ -212,40 +223,40 @@ update msg ((Gallery size config currentSlide dragState slides) as gallery) =
             if currentSlide <= 0 then
                 update
                     (Batch
-                        [ ( 300, SetIndex (currentSlide - 1) )
+                        [ ( config.transitionSpeedWhenAdvancing, SetIndex (currentSlide - 1) )
                         , ( frame, SetIndex (List.length slides - 1) )
                         ]
                     )
                     gallery
 
             else
-                ( Gallery size config (currentSlide - 1) NotDragging slides
+                ( Gallery size config (currentSlide - 1) NotDragging slides transitionSpeed
                 , Cmd.none
                 )
 
         SetIndex index ->
             update
                 (Batch
-                    [ ( frame, SetTransitionSpeed 0 )
+                    [ ( frame, SetTransitionSpeed (TransitionSpeed 0) )
                     , ( frame, GoTo index )
-                    , ( frame, SetTransitionSpeed config.transitionSpeed )
+                    , ( frame, SetTransitionSpeed config.transitionSpeedWhenAdvancing )
                     ]
                 )
                 gallery
 
         GoTo index ->
-            ( Gallery size config index NotDragging slides
+            ( Gallery size config index NotDragging slides transitionSpeed
             , Cmd.none
             )
 
         SetTransitionSpeed timeInMs ->
-            ( Gallery size { config | transitionSpeed = timeInMs } currentSlide dragState slides
+            ( Gallery size config currentSlide dragState slides timeInMs
             , Cmd.none
             )
 
-        Batch (( ms, firstMsg ) :: listOfCmds) ->
+        Batch (( TransitionSpeed ms, firstMsg ) :: listOfCmds) ->
             update firstMsg gallery
-                |> Tuple.mapSecond (\cmd -> Cmd.batch [ wait ms (Batch listOfCmds), cmd ])
+                |> Tuple.mapSecond (\cmd -> Cmd.batch [ wait (toFloat ms) (Batch listOfCmds), cmd ])
 
         Batch [] ->
             ( gallery, Cmd.none )
@@ -282,7 +293,7 @@ setIndex index gallery =
 {-| Retrieve the current displayed Slide index
 -}
 getCurrentIndex : Gallery -> Int
-getCurrentIndex (Gallery _ _ currentSlide _ _) =
+getCurrentIndex (Gallery _ _ currentSlide _ _ _) =
     currentSlide
 
 
@@ -303,7 +314,7 @@ Example:
 
 -}
 view : Gallery -> Html Msg
-view ((Gallery size config currentSlide dragState slides) as gallery) =
+view ((Gallery size config currentSlide dragState slides transitionSpeed) as gallery) =
     let
         viewSlide ( index, slideHtml ) =
             div
@@ -429,7 +440,7 @@ prefixClassName { rootClassName } className =
 {-| Render the Gallery's stylesheet
 -}
 viewStylesheet : Gallery -> Html Msg
-viewStylesheet (Gallery _ config currentSlide _ slides) =
+viewStylesheet (Gallery _ config currentSlide _ slides (TransitionSpeed transitionSpeed)) =
     let
         amountOfSlides =
             List.length slides + 2
@@ -453,7 +464,7 @@ viewStylesheet (Gallery _ config currentSlide _ slides) =
                 , ( "height", "100%" )
                 , ( "display", "grid" )
                 , ( "grid-template-columns", "repeat(" ++ String.fromInt amountOfSlides ++ ", 1fr)" )
-                , ( "transition", "left " ++ String.fromInt config.transitionSpeed ++ "ms ease, transform " ++ String.fromInt (config.transitionSpeed // 2) ++ "ms linear" )
+                , ( "transition", "left " ++ String.fromInt transitionSpeed ++ "ms ease, transform " ++ String.fromInt (transitionSpeed // 2) ++ "ms linear" )
                 , ( "cursor", "grab" )
                 ]
               )
