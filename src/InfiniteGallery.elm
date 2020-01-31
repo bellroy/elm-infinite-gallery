@@ -197,7 +197,7 @@ update msg ((Gallery size config currentSlide dragState slides) as gallery) =
             if currentSlide >= (List.length slides - 1) then
                 update
                     (Batch
-                        [ ( toFloat config.transitionSpeed, SetIndex (currentSlide + 1) )
+                        [ ( 300, SetIndex (currentSlide + 1) )
                         , ( frame, SetIndex 0 )
                         ]
                     )
