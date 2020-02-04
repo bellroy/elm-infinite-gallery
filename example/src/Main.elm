@@ -1,10 +1,12 @@
 module Example exposing (main)
 
 import Browser exposing (element)
+import Browser.Events exposing (onKeyDown)
 import Html exposing (Html, a, button, div, h1, map, p, text)
 import Html.Attributes exposing (attribute, href)
 import Html.Events exposing (onClick)
 import InfiniteGallery as Gallery
+import Json.Decode as Decode
 
 
 type alias Model =
@@ -22,9 +24,28 @@ main =
     element
         { init = init
         , update = update
-        , subscriptions = always Sub.none
+        , subscriptions = always (onKeyDown makeArrowsScroll)
         , view = view
         }
+
+
+makeArrowsScroll : Decode.Decoder Msg
+makeArrowsScroll =
+    Decode.field "key" Decode.string
+        |> Decode.andThen arrowsToSlideNavigation
+
+
+arrowsToSlideNavigation : String -> Decode.Decoder Msg
+arrowsToSlideNavigation keyString =
+    case keyString of
+        "ArrowLeft" ->
+            Decode.succeed Previous
+
+        "ArrowRight" ->
+            Decode.succeed Next
+
+        _ ->
+            Decode.fail ""
 
 
 init : () -> ( Model, Cmd Msg )
