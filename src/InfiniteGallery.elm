@@ -343,7 +343,7 @@ view ((Gallery size config currentSlide dragState slides transitionSpeed) as gal
                     ]
                  ]
                     ++ slidesEvents config.enableDrag dragState
-                    ++ dragOffset dragState
+                    ++ dragOffset dragState currentSlide
                 )
               <|
                 List.map viewSlide <|
@@ -370,18 +370,18 @@ isDragging dragState =
 
 {-| Apply the users drag offset based on the dragState
 -}
-dragOffset : DragState -> List (Attribute Msg)
-dragOffset dragState =
+dragOffset : DragState -> CurrentSlide -> List (Attribute Msg)
+dragOffset dragState currentSlide =
+    let
+        indexBasedOffset =
+            String.fromInt ((currentSlide + 1) * -100) ++ "%"
+    in
     case dragState of
         Dragging (PosX startX) (PosX currentX) ->
-            if (currentX - startX) == 0 then
-                [ style "transform" "translateX(0)" ]
-
-            else
-                [ style "transform" ("translateX(" ++ String.fromInt (currentX - startX) ++ "px)") ]
+            [ style "left" <| "calc(" ++ indexBasedOffset ++ " - " ++ String.fromInt (startX - currentX) ++ "px)" ]
 
         NotDragging ->
-            [ style "transform" "translateX(0)" ]
+            [ style "left" indexBasedOffset ]
 
 
 {-| Create all the slider listeners required to handle the DragState |
@@ -458,13 +458,12 @@ viewStylesheet (Gallery _ config currentSlide _ slides (TransitionSpeed transiti
               )
             , ( "Slides"
               , [ ( "position", "absolute" )
-                , ( "left", String.fromInt ((currentSlide + 1) * -100) ++ "%" )
                 , ( "top", "0" )
                 , ( "width", "" ++ String.fromInt (amountOfSlides * 100) ++ "%" )
                 , ( "height", "100%" )
                 , ( "display", "grid" )
                 , ( "grid-template-columns", "repeat(" ++ String.fromInt amountOfSlides ++ ", 1fr)" )
-                , ( "transition", "left " ++ String.fromInt transitionSpeed ++ "ms ease, transform " ++ String.fromInt (transitionSpeed // 2) ++ "ms linear" )
+                , ( "transition", "left " ++ String.fromInt transitionSpeed ++ "ms ease" )
                 , ( "cursor", "grab" )
                 ]
               )
