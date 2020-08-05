@@ -126,6 +126,7 @@ type Msg
     | SetIndex Int
     | SetTransitionSpeed TransitionSpeed
     | Batch (List ( TransitionSpeed, Msg ))
+    | TransitionEnd
 
 
 {-| Create a new Gallery, with given size, config and slides
@@ -205,34 +206,14 @@ update msg ((Gallery size config currentSlide dragState slides transitionSpeed) 
                         )
 
         Next ->
-            if currentSlide >= (List.length slides - 1) then
-                update
-                    (Batch
-                        [ ( config.transitionSpeedWhenAdvancing, SetIndex (currentSlide + 1) )
-                        , ( frame, SetIndex 0 )
-                        ]
-                    )
-                    gallery
-
-            else
-                ( Gallery size config (currentSlide + 1) NotDragging slides transitionSpeed
-                , Cmd.none
-                )
+            ( Gallery size config (currentSlide + 1) NotDragging slides transitionSpeed
+            , Cmd.none
+            )
 
         Previous ->
-            if currentSlide <= 0 then
-                update
-                    (Batch
-                        [ ( config.transitionSpeedWhenAdvancing, SetIndex (currentSlide - 1) )
-                        , ( frame, SetIndex (List.length slides - 1) )
-                        ]
-                    )
-                    gallery
-
-            else
-                ( Gallery size config (currentSlide - 1) NotDragging slides transitionSpeed
-                , Cmd.none
-                )
+            ( Gallery size config (currentSlide - 1) NotDragging slides transitionSpeed
+            , Cmd.none
+            )
 
         SetIndex index ->
             update
@@ -260,6 +241,18 @@ update msg ((Gallery size config currentSlide dragState slides transitionSpeed) 
 
         Batch [] ->
             ( gallery, Cmd.none )
+
+        TransitionEnd ->
+            if currentSlide == List.length slides then
+                update
+                    (SetIndex 0)
+                    gallery
+
+            else if currentSlide == -1 then
+                update (SetIndex (List.length slides - 1)) gallery
+
+            else
+                ( gallery, Cmd.none )
 
 
 {-| Go to the next slide
@@ -394,6 +387,7 @@ slidesEvents enableDrag dragState =
     else
         [ on "mousedown" (Decode.map DragStart decodePosX)
         , on "touchstart" (Decode.map DragStart decodePosX)
+        , on "transitionend" (Decode.succeed TransitionEnd)
         ]
             ++ (if isDragging dragState then
                     [ preventDefaultOn "mousemove"
