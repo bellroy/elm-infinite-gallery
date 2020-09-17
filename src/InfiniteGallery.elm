@@ -3,7 +3,7 @@ module InfiniteGallery exposing
     , init, update, view
     , previous, next, goTo, setIndex
     , getCurrentIndex
-    , Gallery, Msg
+    , Gallery, Msg(..)
     )
 
 {-|
@@ -195,15 +195,10 @@ update msg ((Gallery size config currentSlide dragState slides transitionSpeed) 
 
                 Dragging (PosX startX) (PosX currentX) ->
                     if (startX - currentX) > config.swipeOffset then
-                        update Next gallery
-
-                    else if abs (startX - currentX) > config.swipeOffset then
-                        update Previous gallery
+                        ( gallery, Task.perform (always Next) (Task.succeed ()) )
 
                     else
-                        ( Gallery size config currentSlide NotDragging slides transitionSpeed
-                        , Cmd.none
-                        )
+                        ( gallery, Task.perform (always Previous) (Task.succeed ()) )
 
         Next ->
             ( Gallery size config (currentSlide + 1) NotDragging slides transitionSpeed
