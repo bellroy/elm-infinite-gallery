@@ -197,8 +197,13 @@ update msg ((Gallery size config currentSlide dragState slides transitionSpeed) 
                     if (startX - currentX) > config.swipeOffset then
                         ( gallery, Task.perform (always Next) (Task.succeed ()) )
 
-                    else
+                    else if abs (startX - currentX) > config.swipeOffset then
                         ( gallery, Task.perform (always Previous) (Task.succeed ()) )
+
+                    else
+                        ( Gallery size config currentSlide NotDragging slides transitionSpeed
+                        , Cmd.none
+                        )
 
         Next ->
             ( Gallery size config (currentSlide + 1) NotDragging slides transitionSpeed
