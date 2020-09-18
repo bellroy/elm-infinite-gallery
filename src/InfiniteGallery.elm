@@ -4,6 +4,7 @@ module InfiniteGallery exposing
     , previous, next, goTo, setIndex
     , getCurrentIndex
     , Gallery, Msg(..)
+    , TransitionSpeed(..)
     )
 
 {-|
