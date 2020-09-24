@@ -1,10 +1,9 @@
 module InfiniteGallery exposing
-    ( Config, defaultConfig
+    ( Config, defaultConfig, TransitionSpeed(..)
     , init, update, view
     , previous, next, goTo, setIndex
     , getCurrentIndex
     , Gallery, Msg(..)
-    , TransitionSpeed(..)
     )
 
 {-|
@@ -12,7 +11,7 @@ module InfiniteGallery exposing
 
 # Configuration
 
-@docs Config, defaultConfig
+@docs Config, defaultConfig, TransitionSpeed
 
 
 # Framework
