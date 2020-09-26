@@ -60,6 +60,7 @@ type alias Config =
     , transitionSpeedWhenAdvancing : TransitionSpeed
     , enableDrag : Bool
     , swipeOffset : Int
+    , initialSlide : Int
     }
 
 
@@ -72,6 +73,7 @@ defaultConfig =
     , transitionSpeedWhenAdvancing = TransitionSpeed 300
     , enableDrag = True
     , swipeOffset = 150
+    , initialSlide = 0
     }
 
 
@@ -140,7 +142,7 @@ init size config slides =
     Gallery
         size
         config
-        0
+        config.initialSlide
         NotDragging
         (List.indexedMap Tuple.pair slides)
         config.transitionSpeedWhenAdvancing
