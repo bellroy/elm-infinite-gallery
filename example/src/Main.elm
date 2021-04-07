@@ -91,9 +91,9 @@ view { gallery } =
     div []
         [ h1 [] [ text "Elm Infinite Gallery Example" ]
         , p []
-            [ a [ href "https://github.com/tricycle/elm-infinite-gallery" ] [ text "view source" ]
+            [ a [ href "https://github.com/bellroy/elm-infinite-gallery" ] [ text "view source" ]
             , text " "
-            , a [ href "https://package.elm-lang.org/packages/tricycle/elm-infinite-gallery/latest/" ] [ text "view documentation" ]
+            , a [ href "https://package.elm-lang.org/packages/bellroy/elm-infinite-gallery/latest/" ] [ text "view documentation" ]
             ]
         , Gallery.view gallery
             |> Html.map MsgForGallery

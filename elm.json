@@ -1,9 +1,9 @@
 {
     "type": "package",
-    "name": "tricycle/elm-infinite-gallery",
+    "name": "bellroy/elm-infinite-gallery",
     "summary": "A simple gallery that supports infinite scrolling",
     "license": "BSD-3-Clause",
-    "version": "4.1.0",
+    "version": "1.0.0",
     "exposed-modules": [
         "InfiniteGallery"
     ],
