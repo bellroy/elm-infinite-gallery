@@ -1,5 +1,5 @@
 module InfiniteGallery exposing
-    ( Config, defaultConfig, TransitionSpeed(..)
+    ( Config, TransitionSpeed(..)
     , init, update, view
     , previous, next, goTo, setIndex
     , getCurrentIndex
@@ -11,7 +11,7 @@ module InfiniteGallery exposing
 
 # Configuration
 
-@docs Config, defaultConfig, TransitionSpeed
+@docs Config, TransitionSpeed
 
 
 # Framework
@@ -39,7 +39,7 @@ import Html exposing (Attribute, Html, div, node, text)
 import Html.Attributes exposing (class, classList, id, style, type_)
 import Html.Events exposing (on, preventDefaultOn)
 import Html.Lazy exposing (lazy2)
-import Json.Decode as Decode exposing (at, field, float, map, oneOf)
+import Json.Decode as Decode exposing (float, map, oneOf)
 import Process exposing (sleep)
 import Task exposing (perform)
 
