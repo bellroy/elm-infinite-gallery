@@ -318,6 +318,9 @@ view ((Gallery size config currentSlide dragState slides transitionSpeed) as gal
                 ]
                 [ slideHtml
                 ]
+
+        amountOfSlides =
+            List.length slides + 2
     in
     div
         [ class config.rootClassName
@@ -336,7 +339,7 @@ view ((Gallery size config currentSlide dragState slides transitionSpeed) as gal
                     ]
                  ]
                     ++ slidesEvents config.enableDrag dragState
-                    ++ dragOffset dragState currentSlide
+                    ++ dragOffset dragState currentSlide amountOfSlides
                 )
               <|
                 List.map viewSlide <|
@@ -363,18 +366,27 @@ isDragging dragState =
 
 {-| Apply the users drag offset based on the dragState
 -}
-dragOffset : DragState -> CurrentSlide -> List (Attribute Msg)
-dragOffset dragState currentSlide =
+dragOffset : DragState -> CurrentSlide -> Int -> List (Attribute Msg)
+dragOffset dragState currentSlide amountOfSlides =
     let
         indexBasedOffset =
-            String.fromInt ((currentSlide + 1) * -100) ++ "%"
+            toFloat (-100 * (currentSlide + 1))
+                / toFloat amountOfSlides
+                |> String.fromFloat
+                |> (\x -> x ++ "%")
     in
     case dragState of
         Dragging (PosX startX) (PosX currentX) ->
-            [ style "left" <| "calc(" ++ indexBasedOffset ++ " - " ++ String.fromInt (startX - currentX) ++ "px)" ]
+            [ style "transform" <|
+                "translateX( calc("
+                    ++ indexBasedOffset
+                    ++ " + "
+                    ++ String.fromInt (currentX - startX)
+                    ++ "px) )"
+            ]
 
         NotDragging ->
-            [ style "left" indexBasedOffset ]
+            [ style "transform" <| "translateX(" ++ indexBasedOffset ++ ")" ]
 
 
 {-| Create all the slider listeners required to handle the DragState |
@@ -457,7 +469,7 @@ viewStylesheet (Gallery _ config currentSlide _ slides (TransitionSpeed transiti
                 , ( "height", "100%" )
                 , ( "display", "grid" )
                 , ( "grid-template-columns", "repeat(" ++ String.fromInt amountOfSlides ++ ", 1fr)" )
-                , ( "transition", "left " ++ String.fromInt transitionSpeed ++ "ms ease" )
+                , ( "transition", "transform " ++ String.fromInt transitionSpeed ++ "ms ease" )
                 , ( "cursor", "grab" )
                 ]
               )
