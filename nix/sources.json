@@ -1,0 +1,14 @@
+{
+  "nixpkgs": {
+    "branch": "nixpkgs-22.05-darwin",
+    "description": "Nix Packages collection",
+    "homepage": "",
+    "owner": "NixOS",
+    "repo": "nixpkgs",
+    "rev": "ecdafdc9f0cd7af2e316a6ba14f98df537714e5f",
+    "sha256": "0yra4yxlj0fqr7m1rmmfjscrd30li4zkdy0g0wi95fiya9v8nbkd",
+    "type": "tarball",
+    "url": "https://github.com/NixOS/nixpkgs/archive/ecdafdc9f0cd7af2e316a6ba14f98df537714e5f.tar.gz",
+    "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
+  }
+}

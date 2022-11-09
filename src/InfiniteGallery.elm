@@ -39,7 +39,7 @@ import Html exposing (Attribute, Html, div, node, text)
 import Html.Attributes exposing (class, classList, id, style, type_)
 import Html.Events exposing (on, preventDefaultOn)
 import Html.Lazy exposing (lazy2)
-import Json.Decode as Decode exposing (at, field, float, map, oneOf)
+import Json.Decode as Decode
 import Process exposing (sleep)
 import Task exposing (perform)
 
@@ -243,12 +243,12 @@ update msg ((Gallery size config currentSlide dragState slides transitionSpeed) 
             ( gallery, Cmd.none )
 
         TransitionEnd ->
-            if currentSlide == List.length slides then
+            if currentSlide >= List.length slides then
                 update
                     (SetIndex 0)
                     gallery
 
-            else if currentSlide == -1 then
+            else if currentSlide < 0 then
                 update (SetIndex (List.length slides - 1)) gallery
 
             else
@@ -307,7 +307,7 @@ Example:
 
 -}
 view : Gallery -> Html Msg
-view ((Gallery size config currentSlide dragState slides transitionSpeed) as gallery) =
+view ((Gallery size config currentSlide dragState slides _) as gallery) =
     let
         viewSlide ( index, slideHtml ) =
             div
@@ -344,9 +344,10 @@ view ((Gallery size config currentSlide dragState slides transitionSpeed) as gal
               <|
                 List.map viewSlide <|
                     List.filterMap identity <|
-                        ([ List.head <| List.reverse slides ]
-                            ++ List.map Just slides
-                            ++ [ List.head slides ]
+                        ((List.head <| List.reverse slides)
+                            :: (List.map Just slides
+                                    ++ [ List.head slides ]
+                               )
                         )
             ]
         ]
